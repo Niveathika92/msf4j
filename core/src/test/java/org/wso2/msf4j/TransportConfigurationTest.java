@@ -28,7 +28,7 @@ import org.wso2.msf4j.exception.TestExceptionMapper2;
 import org.wso2.msf4j.service.SecondService;
 import org.wso2.msf4j.service.TestMicroServiceWithDynamicPath;
 import org.wso2.msf4j.service.TestMicroservice;
-import org.wso2.transport.http.netty.config.TransportsConfiguration;
+import org.wso2.transport.http.netty.contract.config.TransportsConfiguration;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.CustomClassLoaderConstructor;
 import org.yaml.snakeyaml.introspector.BeanAccess;

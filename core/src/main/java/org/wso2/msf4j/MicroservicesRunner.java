@@ -25,17 +25,17 @@ import org.wso2.msf4j.internal.MSF4JHttpConnectorListener;
 import org.wso2.msf4j.internal.MSF4JWSConnectorListener;
 import org.wso2.msf4j.internal.MicroservicesRegistryImpl;
 import org.wso2.msf4j.internal.websocket.EndpointsRegistryImpl;
-import org.wso2.transport.http.netty.common.Constants;
-import org.wso2.transport.http.netty.common.Util;
-import org.wso2.transport.http.netty.config.ConfigurationBuilder;
-import org.wso2.transport.http.netty.config.ListenerConfiguration;
-import org.wso2.transport.http.netty.config.TransportsConfiguration;
+import org.wso2.transport.http.netty.contract.Constants;
 import org.wso2.transport.http.netty.contract.HttpWsConnectorFactory;
 import org.wso2.transport.http.netty.contract.ServerConnector;
 import org.wso2.transport.http.netty.contract.ServerConnectorFuture;
+import org.wso2.transport.http.netty.contract.config.ConfigurationBuilder;
+import org.wso2.transport.http.netty.contract.config.ListenerConfiguration;
+import org.wso2.transport.http.netty.contract.config.ServerBootstrapConfiguration;
+import org.wso2.transport.http.netty.contract.config.TransportsConfiguration;
 import org.wso2.transport.http.netty.contractimpl.DefaultHttpWsConnectorFactory;
-import org.wso2.transport.http.netty.listener.ServerBootstrapConfiguration;
-import org.wso2.transport.http.netty.message.HTTPConnectorUtil;
+import org.wso2.transport.http.netty.contractimpl.common.Util;
+import org.wso2.transport.http.netty.message.HttpConnectorUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -232,7 +232,7 @@ public class MicroservicesRunner {
             TransportsConfiguration transportsConfiguration =
                     ConfigurationBuilder.getInstance().getConfiguration(transportYaml);
 
-            Map<String, Object> transportProperties = HTTPConnectorUtil.getTransportProperties(transportsConfiguration);
+            Map<String, Object> transportProperties = HttpConnectorUtil.getTransportProperties(transportsConfiguration);
             int bossGroup = transportProperties.get(Constants.SERVER_BOOTSTRAP_BOSS_GROUP_SIZE) != null ? (Integer)
                     transportProperties.get(Constants.SERVER_BOOTSTRAP_BOSS_GROUP_SIZE) : Runtime.getRuntime()
                     .availableProcessors();
@@ -242,7 +242,7 @@ public class MicroservicesRunner {
             HttpWsConnectorFactory connectorFactory = new DefaultHttpWsConnectorFactory(bossGroup, workerGroup,
                     workerGroup);
             ServerBootstrapConfiguration serverBootstrapConfiguration =
-                    HTTPConnectorUtil.getServerBootstrapConfiguration(transportsConfiguration.getTransportProperties());
+                    HttpConnectorUtil.getServerBootstrapConfiguration(transportsConfiguration.getTransportProperties());
 
             for (ListenerConfiguration listenerConfiguration : transportsConfiguration.getListenerConfigurations()) {
                 ServerConnector serverConnector =
@@ -262,7 +262,7 @@ public class MicroservicesRunner {
      */
     protected void configureTransport(TransportsConfiguration transportsConfiguration) {
         if (transportsConfiguration != null) {
-            Map<String, Object> transportProperties = HTTPConnectorUtil.getTransportProperties(transportsConfiguration);
+            Map<String, Object> transportProperties = HttpConnectorUtil.getTransportProperties(transportsConfiguration);
             int bossGroup = transportProperties.get(Constants.SERVER_BOOTSTRAP_BOSS_GROUP_SIZE) != null ? (Integer)
                     transportProperties.get(Constants.SERVER_BOOTSTRAP_BOSS_GROUP_SIZE) : Runtime.getRuntime()
                     .availableProcessors();
@@ -272,7 +272,7 @@ public class MicroservicesRunner {
             HttpWsConnectorFactory connectorFactory = new DefaultHttpWsConnectorFactory(bossGroup, workerGroup,
                     workerGroup);
             ServerBootstrapConfiguration serverBootstrapConfiguration =
-                    HTTPConnectorUtil.getServerBootstrapConfiguration(transportsConfiguration.getTransportProperties());
+                    HttpConnectorUtil.getServerBootstrapConfiguration(transportsConfiguration.getTransportProperties());
             for (ListenerConfiguration listenerConfiguration : transportsConfiguration.getListenerConfigurations()) {
                 ServerConnector serverConnector =
                         connectorFactory.createServerConnector(serverBootstrapConfiguration, listenerConfiguration);
@@ -303,7 +303,7 @@ public class MicroservicesRunner {
         serverConnectors.forEach(serverConnector -> {
             ServerConnectorFuture serverConnectorFuture = serverConnector.start();
             serverConnectorFuture.setHttpConnectorListener(msf4JHttpConnectorListener);
-            serverConnectorFuture.setWSConnectorListener(msf4JWSConnectorListener);
+            serverConnectorFuture.setWebSocketConnectorListener(msf4JWSConnectorListener);
             serverConnectorFuture.setPortBindingEventListener(new HttpConnectorPortBindingListener());
             isStarted = true;
             log.info("Microservices server started in " + (System.currentTimeMillis() - startTime) + "ms");

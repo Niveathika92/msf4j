@@ -44,7 +44,7 @@ public class DeploymentTest {
     private static final Logger log = LoggerFactory.getLogger(DeploymentTest.class);
     private final String host = "localhost";
     private final String port = "9090";
-    private final int sleepTime = 100;
+    private final int sleepTime = 1000;
 
     private String echoUrl = "ws://" + host + ":" + port + "/echo";
     private String chatUrl = "ws://" + host + ":" + port + "/chat/";
@@ -93,7 +93,8 @@ public class DeploymentTest {
         echoClient.shutDown();
     }
 
-    @Test(description = "Testing broadcasting messages for text, binary and pong using two clients.")
+    @Test(dependsOnMethods = "testReply",
+            description = "Testing broadcasting messages for text, binary and pong using two clients.")
     public void testBroadcast() throws InterruptedException, SSLException, URISyntaxException {
         //Initializing local variables
         String textReceived;
@@ -107,6 +108,7 @@ public class DeploymentTest {
         Assert.assertTrue(chatClient2.handhshake());
         Thread.sleep(sleepTime);
         textReceived = chatClient1.getTextReceived();
+
         Assert.assertEquals(textReceived, client2Name + " connected to chat");
 
         //Check the broadcast text

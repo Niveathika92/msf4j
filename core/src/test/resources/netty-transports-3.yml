@@ -16,13 +16,15 @@
 ---
 listenerConfigurations:
   -
-    certPass: secret
     host: "0.0.0.0"
     id: jaxrs-http
-    keyStoreFile: src/test/resources/cert.jks
-    keyStorePass: secret
     port: 8096
     scheme: https
+    sslConfig:
+      keyStore: src/test/resources/cert.jks
+      keyStorePass: secret
+      certPass: secret
+
 senderConfigurations:
   -
     id: netty-gw

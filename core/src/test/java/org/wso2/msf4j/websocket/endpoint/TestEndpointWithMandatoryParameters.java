@@ -26,7 +26,7 @@ import javax.websocket.PongMessage;
 import javax.websocket.server.ServerEndpoint;
 
 /**
- *This test class include all the methods of WebSocket with only mandatory parameters according to JSR-356
+ * This test class include all the methods of WebSocket with only mandatory parameters according to JSR-356
  * specification
  */
 @ServerEndpoint("/test-with-mandatory-params")

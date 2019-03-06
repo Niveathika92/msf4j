@@ -572,7 +572,7 @@ public class HttpServerTest {
     }
 
     @Test
-    public void testSleep() throws Exception {
+    public void ztestSleep() throws Exception {
         HttpURLConnection urlConn = request("/test/v1/sleep/10", HttpMethod.GET);
         assertEquals(200, urlConn.getResponseCode());
         urlConn.disconnect();
